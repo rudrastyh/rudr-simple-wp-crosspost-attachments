@@ -4,7 +4,7 @@
  * Author: Misha Rudrastyh
  * Author URI: https://rudrastyh.com
  * Description: Allows to crosspost media files from custom fields.
- * Version: 3.1
+ * Version: 3.2
  * Plugin URI: https://rudrastyh.com/support/crossposting-attachments-from-post-meta
  */
 
@@ -29,11 +29,13 @@ class Rudr_SWC_Attachments {
 		}
 
 		$meta_value = maybe_unserialize( $meta_value );
+		$is_comma_separated = false;
 
 		// comma separated
-		// if( ! is_array( $meta_value ) && false !== strpos( $meta_value, ',' ) ) {
-		// 	$meta_value = array_map( 'trim', explode( ',', $meta_value ) );
-		// }
+		if( ! is_array( $meta_value ) && false !== strpos( $meta_value, ',' ) ) {
+			$is_comma_separated = true;
+			$meta_value = array_map( 'trim', explode( ',', $meta_value ) );
+		}
 
 		if( is_array( $meta_value ) ) {
 			// gallery field
@@ -52,6 +54,11 @@ class Rudr_SWC_Attachments {
 			}
 		}
 		//return null;
+
+		if( $is_comma_separated ) {
+			$meta_value = join( ',', $meta_value );
+		}
+
 		return $meta_value;
 
 	}
